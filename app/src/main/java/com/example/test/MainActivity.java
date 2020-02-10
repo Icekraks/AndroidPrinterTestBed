@@ -15,7 +15,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
-    //TODO: FIX NULL POINTER BLUETOOTH
+    //TODO: FIX NULL POINTER BLUETOOT
 
     testObject lol;
     public MainActivity(){
