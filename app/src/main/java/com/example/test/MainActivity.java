@@ -1,42 +1,41 @@
 package com.example.test;
 
+//Java SDK Imports
+import java.io.*;
+import java.util.Set;
+
+//Android SDK Imports
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-
 import android.bluetooth.BluetoothAdapter;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.pdf.*;
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import androidx.print.PrintHelper;
-import com.brother.ptouch.sdk.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+//Brother SDK Imports
+import com.brother.ptouch.sdk.*;
+import com.brother.ptouch.sdk.PrinterInfo.ErrorCode;
+
+import static android.os.ParcelFileDescriptor.MODE_READ_WRITE;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_ENABLE_BT = 55;
     BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
-    Printer myPrinter;
+    final Printer myPrinter = new Printer();
+
 
     private static String PrinterName;
     private static String MacAddress;
 
-    testObject lol;
-
-    public MainActivity() {
-        this.lol = new testObject(null, null, null);
-    }
 
 
     @Override
@@ -64,18 +63,41 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        myPrinter = new Printer();
-        PrinterInfo info = new PrinterInfo();
+        AssetManager assetManager = getAssets();
+        InputStream input = null;
+        File temp = null;
+//
+        try{
+            for(String x:assetManager.list("")){
+                System.out.println(x);
+            }
+
+            input = assetManager.open("frame.pdf");
+            File
+//            Bitmap bitmap = BitmapFactory.decodeStream(input);
+//            input.close();
+        } catch(Exception e) {
+//
+        }
+//
+        try {
+            PdfRenderer renderer = new PdfRenderer(null);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        PrinterInfo info = myPrinter.getPrinterInfo();
         info.macAddress = MacAddress;
         info.labelNameIndex = LabelInfo.QL700.W29H90.ordinal();
         info.printerModel = PrinterInfo.Model.QL_820NWB;
         info.printMode = PrinterInfo.PrintMode.FIT_TO_PAPER;
         info.halftone = PrinterInfo.Halftone.ERRORDIFFUSION;
+        info.isAutoCut = true;
         myPrinter.setPrinterInfo(info);
         myPrinter.setBluetooth(bluetooth);
         System.out.println(myPrinter.getPrinterStatus());
         System.out.println(myPrinter.getSerialNumber());
-
 
         Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -113,11 +135,11 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                System.out.println("test");
                 if (myPrinter.startCommunication()) {
-//                    PrinterStatus result = myPrinter.printImage(bitmap);
-
-                    PrinterStatus result = myPrinter.printPdfFile();
-                    if (result.errorCode != PrinterInfo.ErrorCode.ERROR_NONE) {
+                    String path = "/Users/Icekraks/Desktop/Lindev/Code/TestAndroid/app/src/main/assets/frame.pdf";
+                    PrinterStatus result = myPrinter.printPdfFile(path,1);
+                    if (result.errorCode != ErrorCode.ERROR_NONE) {
                         Log.d("TAG", "ERROR - " + result.errorCode);
                     }
                     myPrinter.endCommunication();
@@ -134,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
         // Don't forget to unregister the ACTION_FOUND receiver.
-
+//        unregisterReceiver(ACTION_FOUND);
     }
 
 }
