@@ -11,8 +11,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.pdf.*;
-import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -62,30 +60,30 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(deviceHardwareAddress);
             }
         }
-
-        AssetManager assetManager = getAssets();
-        InputStream input = null;
-        File temp = null;
 //
-        try{
-            for(String x:assetManager.list("")){
-                System.out.println(x);
-            }
-
-            input = assetManager.open("frame.pdf");
-            File
-//            Bitmap bitmap = BitmapFactory.decodeStream(input);
-//            input.close();
-        } catch(Exception e) {
+//        AssetManager assetManager = getAssets();
+//        InputStream input = null;
+//        File temp = null;
+////
+//        try{
+//            for(String x:assetManager.list("")){
+//                System.out.println(x);
+//            }
 //
-        }
+//            input = assetManager.open("frame.pdf");
+//            File
+////            Bitmap bitmap = BitmapFactory.decodeStream(input);
+////            input.close();
+//        } catch(Exception e) {
+////
+//        }
+////
+//        try {
+//            PdfRenderer renderer = new PdfRenderer(null);
 //
-        try {
-            PdfRenderer renderer = new PdfRenderer(null);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         PrinterInfo info = myPrinter.getPrinterInfo();
         info.macAddress = MacAddress;
@@ -137,8 +135,17 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 System.out.println("test");
                 if (myPrinter.startCommunication()) {
-                    String path = "/Users/Icekraks/Desktop/Lindev/Code/TestAndroid/app/src/main/assets/frame.pdf";
-                    PrinterStatus result = myPrinter.printPdfFile(path,1);
+//                    String FileName = "meme.bmp";
+//                    String FullFileName = "file:///android_asset/"+FileName;
+//                    Bitmap bitmap = BitmapFactory.decodeFile(FullFileName);
+                    AssetManager assetManager = getAssets();
+                    Bitmap bitmap = null;
+                    try{
+                        bitmap = BitmapFactory.decodeStream(new BufferedInputStream(assetManager.open("meme.bmp")));
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                    PrinterStatus result = myPrinter.printImage(bitmap);
                     if (result.errorCode != ErrorCode.ERROR_NONE) {
                         Log.d("TAG", "ERROR - " + result.errorCode);
                     }
