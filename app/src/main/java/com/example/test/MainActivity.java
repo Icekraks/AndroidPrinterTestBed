@@ -60,7 +60,17 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(deviceHardwareAddress);
             }
         }
-//
+
+
+        AssetManager assetManager = getAssets();
+        Bitmap bitmap = null;
+        try{
+            BufferedInputStream bis =new BufferedInputStream(assetManager.open("meme.bmp"));
+            bitmap = BitmapFactory.decodeStream(bis);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
 //        AssetManager assetManager = getAssets();
 //        InputStream input = null;
 //        File temp = null;
