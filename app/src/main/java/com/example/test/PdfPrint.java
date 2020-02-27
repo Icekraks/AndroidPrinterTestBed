@@ -50,7 +50,7 @@ public class PdfPrint extends BasePrint {
      * set print data
      */
     public void setFiles(String file) {
-        mPdfFile = "/storage/emulated/0/Download/Tom.pdf";
+        mPdfFile = file;
         System.out.println("TITLE: setFiles pdfPrint File" + file );
         System.out.println("TITLE: setFiles pdfPrint mPDF" + mPdfFile );
 
@@ -65,6 +65,7 @@ public class PdfPrint extends BasePrint {
     protected void doPrint() {
 
 
+        for(int i = 0;i<1;i++) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 mPrintResult = mPrinter.printPDF(mPdfFile, 1);
             } else {
@@ -72,11 +73,14 @@ public class PdfPrint extends BasePrint {
                 System.out.println(mPdfFile);
                 mPrintResult = mPrinter.printPdfFile(mPdfFile, 1);
 
+
+
             }
             if (mPrintResult.errorCode != ErrorCode.ERROR_NONE) {
-                System.err.println("Failed to Print. Error: "+mPrintResult.errorCode);
-                return;
+                System.err.println("Failed to Print. Error: " + mPrintResult.errorCode);
+                break;
             }
+        }
     }
 
 }

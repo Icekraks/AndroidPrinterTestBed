@@ -166,10 +166,12 @@ public abstract class BasePrint {
         }
         mPrinterInfo.orientation = PrinterInfo.Orientation.PORTRAIT;
         mPrinterInfo.labelNameIndex = LabelInfo.QL700.W62H100.ordinal();
-        mPrinterInfo.printMode = PrinterInfo.PrintMode.FIT_TO_PAPER;
+        mPrinterInfo.printMode = PrinterInfo.PrintMode.FIT_TO_PAGE;
         mPrinterInfo.halftone = PrinterInfo.Halftone.PATTERNDITHER;
         mPrinterInfo.numberOfCopies = 1;
         mPrinterInfo.isAutoCut = true;
+        mPrinterInfo.scaleValue = 1.0;
+        mPrinterInfo.printQuality = PrinterInfo.PrintQuality.NORMAL;
     }
 
     /**
