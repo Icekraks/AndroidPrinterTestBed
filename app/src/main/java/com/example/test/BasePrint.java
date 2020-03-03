@@ -28,7 +28,6 @@ import java.util.Set;
 
 @SuppressWarnings("ALL")
 public abstract class BasePrint {
-    private static final long BLE_RESOLVE_TIMEOUT = 5000;
     static Printer mPrinter;
     static boolean mCancel;
     final MsgHandle mHandle;
@@ -135,7 +134,6 @@ public abstract class BasePrint {
 
     public void setBluetoothAdapter(BluetoothAdapter bluetoothAdapter) {
         mPrinter.setBluetooth(bluetoothAdapter);
-        mPrinter.setBluetoothLowEnergy(mContext, bluetoothAdapter, BLE_RESOLVE_TIMEOUT);
     }
 
 
@@ -155,7 +153,7 @@ public abstract class BasePrint {
             for (BluetoothDevice device : pairedDevices) {
                 String deviceName = device.getName();
                 String deviceHardwareAddress = device.getAddress(); // MAC address
-                if (deviceName.equals("QL-820NWB8014")) {
+                if (deviceName.contains("QL-820NWB")) {
                     mPrinterInfo.setLocalName(deviceName);
                     mPrinterInfo.macAddress = deviceHardwareAddress;
                 }
@@ -165,7 +163,7 @@ public abstract class BasePrint {
             }
         }
         mPrinterInfo.orientation = PrinterInfo.Orientation.PORTRAIT;
-        mPrinterInfo.labelNameIndex = LabelInfo.QL700.W62H100.ordinal();
+        mPrinterInfo.labelNameIndex = LabelInfo.QL700.W29H90.ordinal();
         mPrinterInfo.printMode = PrinterInfo.PrintMode.FIT_TO_PAGE;
         mPrinterInfo.halftone = PrinterInfo.Halftone.PATTERNDITHER;
         mPrinterInfo.numberOfCopies = 1;
