@@ -45,8 +45,6 @@ public abstract class BaseActivity extends Activity {
     MsgHandle mHandle;
     MsgDialog mDialog;
 
-    public abstract void selectFileButtonOnClick();
-
     public abstract void printButtonOnClick();
 
 

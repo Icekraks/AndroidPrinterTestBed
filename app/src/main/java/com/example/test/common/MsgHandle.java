@@ -35,10 +35,6 @@ public class MsgHandle extends Handler {
     /**
      * set the function id
      */
-    public void setFunction(int funcID) {
-
-        this.funcID = funcID;
-    }
 
     /**
      * set the printing result
@@ -46,13 +42,6 @@ public class MsgHandle extends Handler {
     public void setResult(String results) {
 
         mResult = results;
-    }
-
-    /**
-     * set the Battery info.
-     */
-    public void setBattery(String battery) {
-        mBattery = battery;
     }
 
     /**
@@ -165,11 +154,7 @@ public class MsgHandle extends Handler {
                 }
             case Common.MSG_PRINT_END:
             case Common.MSG_DATA_SEND_END:
-                if (mBattery != null && !mBattery.equals("")) {
-                    mDialog.showPrintCompleteMsgDialog((mResult + "\nBattery: " + mBattery));
-                } else {
                     mDialog.showPrintCompleteMsgDialog(mResult);
-                }
                 isCancelled = false;
                 break;
             case Common.MSG_PRINT_CANCEL:

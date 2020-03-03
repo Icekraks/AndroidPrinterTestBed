@@ -23,17 +23,6 @@ public class PdfPrint extends BasePrint {
         super(context, mHandle, mDialog);
     }
 
-    /**
-     * get print pdf pages
-     */
-    public int getPdfPages(String file) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return mPrinter.getPDFPages(file);
-        } else {
-            return mPrinter.getPDFFilePages(file);
-
-        }
-    }
 
     /**
      * set print pdf pages
@@ -51,10 +40,6 @@ public class PdfPrint extends BasePrint {
      */
     public void setFiles(String file) {
         mPdfFile = file;
-        System.out.println("TITLE: setFiles pdfPrint File" + file );
-        System.out.println("TITLE: setFiles pdfPrint mPDF" + mPdfFile );
-
-
 
     }
 

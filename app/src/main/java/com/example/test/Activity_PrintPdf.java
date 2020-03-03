@@ -60,7 +60,7 @@ public class Activity_PrintPdf extends BaseActivity {
         // get data from other application by way of intent sending
 
             //HARD CODED THE PATH OF THE IMAGE,
-            File tempFile = new File("/storage/emulated/0/Download/babyyoda.pdf");
+            File tempFile = new File("/storage/emulated/0/Download/eeb.pdf");
             System.out.println("File Exists? "+tempFile.exists());
             setPdfFile(tempFile.getPath());
 
@@ -88,17 +88,6 @@ public class Activity_PrintPdf extends BaseActivity {
         }
     }
 
-    @Override
-    public void selectFileButtonOnClick() {
-
-        // call File Explorer Activity to select a pdf file
-//        File [] files = new File[3];
-//        files[0]=new File("/storage/emulated/0/Download/Tom.pdf");
-//        files[1]=new File("/storage/emulated/0/Download/frame.pdf");
-//        files[2]=new File("/storage/emulated/0/Download/IcekraksIG.pdf");
-
-        return;
-    }
 
     /**
      * Called when [Print] button is tapped
