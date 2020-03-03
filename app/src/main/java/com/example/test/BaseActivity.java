@@ -24,23 +24,6 @@ import com.example.test.common.MsgHandle;
 
 public abstract class BaseActivity extends Activity {
 
-    static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
-    private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
-        @TargetApi(12)
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (ACTION_USB_PERMISSION.equals(action)) {
-                synchronized (this) {
-                    if (intent.getBooleanExtra(
-                            UsbManager.EXTRA_PERMISSION_GRANTED, false))
-                        Common.mUsbRequest = 1;
-                    else
-                        Common.mUsbRequest = 2;
-                }
-            }
-        }
-    };
     BasePrint myPrint = null;
     MsgHandle mHandle;
     MsgDialog mDialog;

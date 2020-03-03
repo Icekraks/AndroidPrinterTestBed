@@ -121,13 +121,6 @@ public abstract class BasePrint {
     /**
      * get Printer
      */
-    public PrinterStatus getPrintResult() {
-        return mPrintResult;
-    }
-
-    /**
-     * get Printer
-     */
     public void setPrintResult(PrinterStatus printResult) {
         mPrintResult = printResult;
     }
@@ -163,7 +156,7 @@ public abstract class BasePrint {
             }
         }
         mPrinterInfo.orientation = PrinterInfo.Orientation.PORTRAIT;
-        mPrinterInfo.labelNameIndex = LabelInfo.QL700.W29H90.ordinal();
+        mPrinterInfo.labelNameIndex = LabelInfo.QL700.W62H100.ordinal();
         mPrinterInfo.printMode = PrinterInfo.PrintMode.FIT_TO_PAGE;
         mPrinterInfo.halftone = PrinterInfo.Halftone.PATTERNDITHER;
         mPrinterInfo.numberOfCopies = 1;

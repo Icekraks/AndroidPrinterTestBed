@@ -21,7 +21,6 @@ public class MsgHandle extends Handler {
     private final Context mContext;
     private final MsgDialog mDialog;
     private String mResult;
-    private String mBattery;
     private boolean isCancelled = false;
     private int funcID = FUNC_OTHER;
 
