@@ -98,11 +98,15 @@ public abstract class BasePrint {
                 }
             }
         }
-        //TODO: CONVERT STRING TO PAPER TYPE
-        switch
-
+        switch(PaperType){
+            case "62*100":
+                mPrinterInfo.labelNameIndex = LabelInfo.QL700.W62H100.ordinal();
+            case "29*90":
+                mPrinterInfo.labelNameIndex = LabelInfo.QL700.W29H90.ordinal();
+            case "62RedBlack":
+                mPrinterInfo.labelNameIndex = LabelInfo.QL700.W62RB.ordinal();
+        }
         mPrinterInfo.orientation = PrinterInfo.Orientation.LANDSCAPE;
-        mPrinterInfo.labelNameIndex = LabelInfo.QL700.W62H100.ordinal();
         mPrinterInfo.printMode = PrinterInfo.PrintMode.FIT_TO_PAGE;
         mPrinterInfo.halftone = PrinterInfo.Halftone.ERRORDIFFUSION;
         mPrinterInfo.numberOfCopies = 1;
