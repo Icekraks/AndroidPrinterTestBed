@@ -54,6 +54,7 @@ public abstract class BasePrint {
         if(mPrinterInfo==null){
             mPrinterInfo = new PrinterInfo();
         }
+        mPrinterInfo = mPrinter.getPrinterInfo();
         mPrinterInfo.printerModel = PrinterInfo.Model.QL_820NWB;
         mPrinterInfo.macAddress = macAddress;
 

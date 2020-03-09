@@ -68,16 +68,6 @@ public abstract class BaseActivity extends Activity {
     /**
      * get the BluetoothAdapter
      */
-    BluetoothAdapter getBluetoothAdapter() {
-        final BluetoothAdapter bluetoothAdapter = BluetoothAdapter
-                .getDefaultAdapter();
-        if (bluetoothAdapter != null && !bluetoothAdapter.isEnabled()) {
-            final Intent enableBtIntent = new Intent(
-                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            enableBtIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(enableBtIntent);
-        }
-        return bluetoothAdapter;
-    }
+
 
 }

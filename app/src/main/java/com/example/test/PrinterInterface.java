@@ -13,8 +13,8 @@ public class PrinterInterface {
     public void setPrinterDetails(ArrayList<String> printerDetails){
         if(printerDetails!=null && printerDetails.size()==4){
             myPrint.setPrinterInfo(printerDetails.get(0),printerDetails.get(1),printerDetails.get(2));
-            printPDF temp = (printPDF)myPrint;
-            temp.setFile(printerDetails.get(3));
+            ((printPDF)myPrint).setFile(printerDetails.get(3));
+            ((printPDF)myPrint).setPrintPages(1,2);
         }
     }
     public void print(){

@@ -19,14 +19,14 @@ import android.view.View;
 import android.widget.Button;
 
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Set;
 
 public class Activity_PrintPdf extends BaseActivity {
 
     private final int PERMISSION_WRITE_EXTERNAL_STORAGE = 10001;
-
+    BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
+    private static final int REQUEST_ENABLE_BT = 55;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +34,18 @@ public class Activity_PrintPdf extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         // initialization for Activity
 
         printInterface = new PrinterInterface();
         ArrayList<String> temp = new ArrayList<>();
 
-        Set<BluetoothDevice> pairedDevices = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
+        if (!bluetooth.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+
+        Set<BluetoothDevice> pairedDevices = bluetooth.getBondedDevices();
         if (pairedDevices.size() > 0) {
             // There are paired devices. Get the name and address of each paired device.
             for (BluetoothDevice device : pairedDevices) {
@@ -53,6 +59,9 @@ public class Activity_PrintPdf extends BaseActivity {
                 }
 
             }
+        }
+        for(String x: temp){
+            System.out.println(x);
         }
 
         printInterface.setPrinterDetails(temp);
@@ -97,4 +106,6 @@ public class Activity_PrintPdf extends BaseActivity {
         }
     }
 
+
 }
+
