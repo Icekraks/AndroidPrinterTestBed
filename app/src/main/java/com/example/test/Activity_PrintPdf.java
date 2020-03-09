@@ -17,9 +17,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.test.common.Common;
-import com.example.test.common.MsgDialog;
-import com.example.test.common.MsgHandle;
 
 import java.io.File;
 
@@ -45,9 +42,7 @@ public class Activity_PrintPdf extends BaseActivity {
 
 
         // initialization for printing
-        mDialog = new MsgDialog(this);
-        mHandle = new MsgHandle(this, mDialog);
-        myPrint = new PdfPrint(this, mHandle, mDialog);
+        myPrint = new PdfPrint(this);
 
         // set the adapter when printing by way of Bluetooth
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -95,7 +90,7 @@ public class Activity_PrintPdf extends BaseActivity {
         int endPage = 1;
 
         // All pages
-        // error if startPage > endPage
+        // errogtr if startPage > endPage
 
         // call function to print
         ((PdfPrint) myPrint).setPrintPage(startPage, endPage);
@@ -103,33 +98,39 @@ public class Activity_PrintPdf extends BaseActivity {
 
     }
 
-    /**
-     * Called when an activity you launched exits, giving you the requestCode
-     * you started it with, the resultCode it returned, and any additional data
-     * from it.
-     */
-    @Override
-    protected void onActivityResult(final int requestCode,
-                                    final int resultCode, final Intent data) {
-
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // get pdf File and set the new data to display
-        if (resultCode == RESULT_OK && requestCode == Common.FILE_SELECT_PDF) {
-            final String strRtn = data.getStringExtra(Common.INTENT_FILE_NAME);
-            setPdfFile(strRtn);
-        }
-    }
+//    /**
+//     * Called when an activity you launched exits, giving you the requestCode
+//     * you started it with, the resultCode it returned, and any additional data
+//     * from it.
+//     */
+//    @Override
+//    protected void onActivityResult(final int requestCode,
+//                                    final int resultCode, final Intent data) {
+//
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        // get pdf File and set the new data to display
+//        if (resultCode == RESULT_OK && requestCode == Common.FILE_SELECT_PDF) {
+//            final String strRtn = dataca.getStringExtra(Common.INTENT_FILE_NAME);
+//            setPdfFile(strRtn);
+//        }
+//    }
 
     /**
      * set the pdf file for printing
      */
     private void setPdfFile(String file) {
         System.out.println("setPDFFile"+file);
-        if (Common.isPdfFile(file)) {
+        if (isPdfFile(file)) {
             ((PdfPrint) myPrint).setFiles(file);
         }
 
+    }
+    public static boolean isPdfFile(String path) {
+
+        String extention = path.substring(
+                path.lastIndexOf(".", path.length()) + 1, path.length());
+        return extention.equalsIgnoreCase("pdf");
     }
 
 }

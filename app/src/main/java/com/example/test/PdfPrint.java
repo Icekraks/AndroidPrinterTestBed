@@ -10,8 +10,6 @@ import android.content.Context;
 import android.os.Build;
 
 import com.brother.ptouch.sdk.PrinterInfo.ErrorCode;
-import com.example.test.common.MsgDialog;
-import com.example.test.common.MsgHandle;
 
 public class PdfPrint extends BasePrint {
 
@@ -19,8 +17,8 @@ public class PdfPrint extends BasePrint {
     private int endIndex;
     private String mPdfFile;
 
-    public PdfPrint(Context context, MsgHandle mHandle, MsgDialog mDialog) {
-        super(context, mHandle, mDialog);
+    public PdfPrint(Context context) {
+        super(context);
     }
 
 
@@ -50,17 +48,13 @@ public class PdfPrint extends BasePrint {
     protected void doPrint() {
 
 
-        for(int i = 0;i<1;i++) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                mPrintResult = mPrinter.printPDF(mPdfFile, 1);
-            } else {
-                System.out.println("right b4 print");
-                System.out.println(mPdfFile);
-                mPrintResult = mPrinter.printPdfFile(mPdfFile, 1);
+        for (int i = 0; i < 1; i++) {
+
+            System.out.println("right b4 print");
+            System.out.println(mPdfFile);
+            mPrintResult = mPrinter.printPdfFile(mPdfFile, 1);
 
 
-
-            }
             if (mPrintResult.errorCode != ErrorCode.ERROR_NONE) {
                 System.err.println("Failed to Print. Error: " + mPrintResult.errorCode);
                 break;
