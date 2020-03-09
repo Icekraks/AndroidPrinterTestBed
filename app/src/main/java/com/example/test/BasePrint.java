@@ -1,17 +1,8 @@
-/**
- * BasePrint for printing
- *
- * @author Brother Industries, Ltd.
- * @version 2.2
- */
-
 package com.example.test;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import com.brother.ptouch.sdk.LabelInfo;
 import com.brother.ptouch.sdk.Printer;
@@ -26,18 +17,17 @@ import java.util.Set;
 public abstract class BasePrint {
     static Printer mPrinter;
     static boolean mCancel;
-    private final SharedPreferences sharedPreferences;
     private final Context mContext;
     PrinterStatus mPrintResult;
     private boolean manualCustomPaperSettingsEnabled;
     private String customSetting;
     private PrinterInfo mPrinterInfo;
+    private String PaperType;
 
-    BasePrint(Context context) {
+    BasePrint(Context context,String PaperrType) {
 
         mContext = context;
-        sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(context);
+        PaperType = PaperrType;
         mCancel = false;
         // initialization for print
         mPrinterInfo = new PrinterInfo();
@@ -70,14 +60,13 @@ public abstract class BasePrint {
             this.errorMessage = errorMessage;
         }
     }
-
     /**
      * set PrinterInfo
      *
      * @return setCustomPaper's result. can ignore other than raster print
      */
     public BasePrintResult setPrinterInfo() {
-        getPreferences();
+        setPreferences();
         mPrinter.setPrinterInfo(mPrinterInfo);
         return BasePrintResult.success();
 
@@ -89,14 +78,13 @@ public abstract class BasePrint {
 
 
     /**
-     * get the printer settings from the SharedPreferences
+     * Sets the printer settings from the SharedPreferences
      */
-    private void getPreferences() {
+    private void setPreferences() {
         if (mPrinterInfo == null) {
             mPrinterInfo = new PrinterInfo();
             return;
         }
-        String input;
         mPrinterInfo.printerModel = Model.QL_820NWB;
         Set<BluetoothDevice> pairedDevices = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
         if (pairedDevices.size() > 0) {
@@ -108,15 +96,15 @@ public abstract class BasePrint {
                     mPrinterInfo.setLocalName(deviceName);
                     mPrinterInfo.macAddress = deviceHardwareAddress;
                 }
-                System.out.println(deviceName);
-                System.out.println(deviceHardwareAddress);
-
             }
         }
-        mPrinterInfo.orientation = PrinterInfo.Orientation.PORTRAIT;
+        //TODO: CONVERT STRING TO PAPER TYPE
+        switch
+
+        mPrinterInfo.orientation = PrinterInfo.Orientation.LANDSCAPE;
         mPrinterInfo.labelNameIndex = LabelInfo.QL700.W62H100.ordinal();
         mPrinterInfo.printMode = PrinterInfo.PrintMode.FIT_TO_PAGE;
-        mPrinterInfo.halftone = PrinterInfo.Halftone.PATTERNDITHER;
+        mPrinterInfo.halftone = PrinterInfo.Halftone.ERRORDIFFUSION;
         mPrinterInfo.numberOfCopies = 1;
         mPrinterInfo.isAutoCut = true;
         mPrinterInfo.scaleValue = 1.0;

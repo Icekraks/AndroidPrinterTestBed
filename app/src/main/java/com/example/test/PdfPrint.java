@@ -1,14 +1,7 @@
-/**
- * PdfPrint for printing
- *
- * @author Brother Industries, Ltd.
- * @version 2.2
- */
+
 package com.example.test;
 
 import android.content.Context;
-import android.os.Build;
-
 import com.brother.ptouch.sdk.PrinterInfo.ErrorCode;
 
 public class PdfPrint extends BasePrint {
@@ -17,20 +10,18 @@ public class PdfPrint extends BasePrint {
     private int endIndex;
     private String mPdfFile;
 
-    public PdfPrint(Context context) {
-        super(context);
+    public PdfPrint(Context context,String PaperType) {
+        super(context,PaperType);
     }
 
 
     /**
-     * set print pdf pages
+     * Sets the starting and ending indexes of the pdf file.
      */
     public void setPrintPage(int start, int end) {
 
         startIndex = start;
         endIndex = end;
-        System.out.println(startIndex);
-        System.out.println(endIndex);
     }
 
     /**
@@ -42,7 +33,7 @@ public class PdfPrint extends BasePrint {
     }
 
     /**
-     * do the particular print
+     * Implements the abstracted doPrint method in BasePrint.java for pdf specific printing.
      */
     @Override
     protected void doPrint() {
