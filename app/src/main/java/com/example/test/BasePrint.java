@@ -1,63 +1,27 @@
-/**
- * BasePrint for printing
- *
- * @author Brother Industries, Ltd.
- * @version 2.2
- */
-
 package com.example.test;
-
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Message;
-import android.preference.PreferenceManager;
 
 import com.brother.ptouch.sdk.LabelInfo;
 import com.brother.ptouch.sdk.Printer;
 import com.brother.ptouch.sdk.PrinterInfo;
-import com.brother.ptouch.sdk.PrinterInfo.ErrorCode;
-import com.brother.ptouch.sdk.PrinterInfo.Model;
 import com.brother.ptouch.sdk.PrinterStatus;
-import com.example.test.common.Common;
-import com.example.test.common.MsgDialog;
-import com.example.test.common.MsgHandle;
 
-import java.util.Set;
-
-@SuppressWarnings("ALL")
 public abstract class BasePrint {
     static Printer mPrinter;
-    static boolean mCancel;
-    final MsgHandle mHandle;
-    final MsgDialog mDialog;
-    private final SharedPreferences sharedPreferences;
-    private final Context mContext;
+    protected PrinterInfo mPrinterInfo;
     PrinterStatus mPrintResult;
-    private boolean manualCustomPaperSettingsEnabled;
-    private String customSetting;
-    private PrinterInfo mPrinterInfo;
+    static boolean mCancel;
 
-    BasePrint(Context context, MsgHandle handle, MsgDialog dialog) {
-
-        mContext = context;
-        mDialog = dialog;
-        mHandle = handle;
-        mDialog.setHandle(mHandle);
-        sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(context);
+    BasePrint(){
         mCancel = false;
-        // initialization for print
         mPrinterInfo = new PrinterInfo();
         mPrinter = new Printer();
         mPrinterInfo = mPrinter.getPrinterInfo();
-        mPrinter.setMessageHandle(mHandle, Common.MSG_SDK_EVENT);
     }
 
-    public static void cancel() {
-        if (mPrinter != null)
+    public static void cancel(){
+        if(mPrinter!=null){
             mPrinter.cancel();
+        }
         mCancel = true;
     }
 
@@ -81,139 +45,59 @@ public abstract class BasePrint {
         }
     }
 
-    /**
-     * set PrinterInfo
-     *
-     * @return setCustomPaper's result. can ignore other than raster print
-     */
-    public BasePrintResult setPrinterInfo() {
-        getPreferences();
-        mPrinter.setPrinterInfo(mPrinterInfo);
-        if (mPrinterInfo.port == PrinterInfo.Port.USB) {
-            while (true) {
-                if (Common.mUsbRequest != 0)
-                    break;
-            }
-            if (Common.mUsbRequest != 1) {
-            }
-        }
-
-            return BasePrintResult.success();
-
-    }
-
-    /**
-     * get PrinterInfo
-     */
-    public PrinterInfo getPrinterInfo() {
-        getPreferences();
+    public PrinterInfo getPrinterInfo(){
         return mPrinterInfo;
     }
 
-    /**
-     * get Printer
-     */
-    public Printer getPrinter() {
-
-        return mPrinter;
-    }
-
-    /**
-     * get Printer
-     */
-    public void setPrintResult(PrinterStatus printResult) {
-        mPrintResult = printResult;
-    }
-
-    public void setBluetoothAdapter(BluetoothAdapter bluetoothAdapter) {
-        mPrinter.setBluetooth(bluetoothAdapter);
-    }
-
-
-    /**
-     * get the printer settings from the SharedPreferences
-     */
-    private void getPreferences() {
-        if (mPrinterInfo == null) {
+    public void setPrinterInfo(String name, String macAddress,String paperType){
+        //TODO: change so its parsing values from the device's bluetooth module to the library.
+        if(mPrinterInfo==null){
             mPrinterInfo = new PrinterInfo();
-            return;
         }
-        String input;
-        mPrinterInfo.printerModel = Model.QL_820NWB;
-        Set<BluetoothDevice> pairedDevices = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
-        if (pairedDevices.size() > 0) {
-            // There are paired devices. Get the name and address of each paired device.
-            for (BluetoothDevice device : pairedDevices) {
-                String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress(); // MAC address
-                if (deviceName.contains("QL-820NWB")) {
-                    mPrinterInfo.setLocalName(deviceName);
-                    mPrinterInfo.macAddress = deviceHardwareAddress;
-                }
-                System.out.println(deviceName);
-                System.out.println(deviceHardwareAddress);
+        mPrinterInfo.printerModel = PrinterInfo.Model.QL_820NWB;
+        mPrinterInfo.macAddress = macAddress;
 
-            }
-        }
-        mPrinterInfo.orientation = PrinterInfo.Orientation.PORTRAIT;
+        //TODO: STRING TO PAPER TYPE CONVERSION
         mPrinterInfo.labelNameIndex = LabelInfo.QL700.W62H100.ordinal();
-        mPrinterInfo.printMode = PrinterInfo.PrintMode.FIT_TO_PAGE;
-        mPrinterInfo.halftone = PrinterInfo.Halftone.PATTERNDITHER;
+        mPrinterInfo.orientation = PrinterInfo.Orientation.LANDSCAPE;
+        mPrinterInfo.printMode = PrinterInfo.PrintMode.FIT_TO_PAPER;
+        mPrinterInfo.halftone = PrinterInfo.Halftone.ERRORDIFFUSION;
         mPrinterInfo.numberOfCopies = 1;
         mPrinterInfo.isAutoCut = true;
         mPrinterInfo.scaleValue = 1.0;
         mPrinterInfo.printQuality = PrinterInfo.PrintQuality.NORMAL;
+
+
+
+
     }
 
-    /**
-     * Launch the thread to print
-     */
-    public void print() {
+    public void bindPrinterInfo(){
+        mPrinter.setPrinterInfo(mPrinterInfo);
+    }
+
+
+    public void print(){
         mCancel = false;
-        PrinterThread printTread = new PrinterThread();
-        printTread.start();
+        PrinterThread printerThread = new PrinterThread();
+        printerThread.start();
     }
-
-    /**
-     * Launch the thread to get the printer's status
-     */
     public void getPrinterStatus() {
         mCancel = false;
         getStatusThread getTread = new getStatusThread();
         getTread.start();
     }
 
-    /**
-     * Launch the thread to print
-     */
     public void sendFile() {
 
 
-        SendFileThread getTread = new SendFileThread();
-        getTread.start();
+        SendFileThread getThread = new SendFileThread();
+        getThread.start();
     }
-
-    /**
-     * set custom paper for RJ and TD
-     */
-
-
-    private float parseFloat(String s, float defaultValue) {
-        try {
-            return Float.parseFloat(s);
-        } catch (NumberFormatException e) {
-            return defaultValue;
-        }
-    }
-
-    /**
-     * get the end message of print
-     */
-    @SuppressWarnings("UnusedAssignment")
     public String showResult() {
 
         String result;
-        if (mPrintResult.errorCode == ErrorCode.ERROR_NONE) {
+        if (mPrintResult.errorCode == PrinterInfo.ErrorCode.ERROR_NONE) {
             result = "Succeeded";
         } else {
             result = mPrintResult.errorCode.toString();
@@ -222,71 +106,39 @@ public abstract class BasePrint {
         return result;
     }
 
-    /**
-     * show information of battery
-     */
-
-
-    /**
-     * Thread for printing
-     */
     private class PrinterThread extends Thread {
         @Override
-        public void run() {
-
-            // set info. for printing
-            BasePrintResult result = setPrinterInfo();
-            if (result.success == false) {
-                mHandle.setResult(result.errorMessage);
-                mHandle.sendMessage(mHandle.obtainMessage(Common.MSG_PRINT_END));
-                return;
-            }
-
-            // start message
-            Message msg = mHandle.obtainMessage(Common.MSG_PRINT_START);
-            mHandle.sendMessage(msg);
-
+        public void run(){
+            bindPrinterInfo();
             mPrintResult = new PrinterStatus();
-
             mPrinter.startCommunication();
             if (!mCancel) {
                 doPrint();
             } else {
-                mPrintResult.errorCode = ErrorCode.ERROR_CANCEL;
+                mPrintResult.errorCode = PrinterInfo.ErrorCode.ERROR_CANCEL;
             }
             mPrinter.endCommunication();
-
-            // end message
-            mHandle.setResult(showResult());
-            msg = mHandle.obtainMessage(Common.MSG_PRINT_END);
-            mHandle.sendMessage(msg);
+            System.out.println(showResult());
         }
     }
 
-    /**
-     * Thread for getting the printer's status
-     */
     private class getStatusThread extends Thread {
         @Override
         public void run() {
 
-            // set info. for printing
-            setPrinterInfo();
+            bindPrinterInfo();
 
-            // start message
-            Message msg = mHandle.obtainMessage(Common.MSG_PRINT_START);
-            mHandle.sendMessage(msg);
+
+
 
             mPrintResult = new PrinterStatus();
             if (!mCancel) {
                 mPrintResult = mPrinter.getPrinterStatus();
             } else {
-                mPrintResult.errorCode = ErrorCode.ERROR_CANCEL;
+                mPrintResult.errorCode = PrinterInfo.ErrorCode.ERROR_CANCEL;
             }
-            // end message
-            mHandle.setResult(showResult());
-            msg = mHandle.obtainMessage(Common.MSG_PRINT_END);
-            mHandle.sendMessage(msg);
+
+            System.out.println(showResult());
 
         }
     }
@@ -299,11 +151,7 @@ public abstract class BasePrint {
         public void run() {
 
             // set info. for printing
-            setPrinterInfo();
-
-            // start message
-            Message msg = mHandle.obtainMessage(Common.MSG_PRINT_START);
-            mHandle.sendMessage(msg);
+            bindPrinterInfo();
 
             mPrintResult = new PrinterStatus();
 
@@ -312,11 +160,9 @@ public abstract class BasePrint {
             doPrint();
 
             mPrinter.endCommunication();
-            // end message
-            mHandle.setResult(showResult());
-            msg = mHandle.obtainMessage(Common.MSG_PRINT_END);
-            mHandle.sendMessage(msg);
+            System.out.println(showResult());
 
         }
     }
+
 }

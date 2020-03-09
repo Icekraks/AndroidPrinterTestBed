@@ -18,17 +18,11 @@ import android.content.Intent;
 import android.hardware.usb.UsbManager;
 import android.view.KeyEvent;
 
-import com.example.test.common.Common;
-import com.example.test.common.MsgDialog;
-import com.example.test.common.MsgHandle;
+
 
 public abstract class BaseActivity extends Activity {
 
-    BasePrint myPrint = null;
-    MsgHandle mHandle;
-    MsgDialog mDialog;
-
-    public abstract void printButtonOnClick();
+    public PrinterInterface printInterface = null;
 
 
     /**
